@@ -385,17 +385,9 @@ async function placeOrder() {
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Salvando...'; }
 
   try {
-    // Atomic order number via transaction
-    const counterRef = db.collection('config').doc('contador');
-    let orderNum;
-    await db.runTransaction(async t => {
-      const doc = await t.get(counterRef);
-      const n   = doc.exists ? (doc.data().pedidos || 0) : 0;
-      orderNum  = n + 1;
-      t.set(counterRef, { pedidos: orderNum }, { merge: true });
-    });
-
-    const numStr = String(orderNum).padStart(4, '0');
+    // Order number from current count (read-only, no transaction needed)
+    const countSnap = await db.collection('pedidos').get();
+    const numStr = String(countSnap.size + 1).padStart(4, '0');
 
     await db.collection('pedidos').add({
       num: numStr,
