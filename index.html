@@ -301,8 +301,8 @@ let activeCat  = 'all';
 let step       = 1;
 let co         = { delivery: 'entrega' };
 
-const DELIVERY_FEE = 5;
-const PIX_KEY      = '(11) 99999-9999';
+let DELIVERY_FEE = 5;
+let PIX_KEY      = '(11) 99999-9999';
 
 // Cart: stays in localStorage (per device, intentional)
 const CART = {
@@ -341,6 +341,22 @@ const CATS = [
   { id:'combos',     label:'🎁 Combos'     },
   { id:'sobremesas', label:'🍮 Sobremesas' },
 ];
+
+/* =====================================================
+   FIREBASE: LOAD SETTINGS (PIX, taxa, endereço)
+   ===================================================== */
+async function loadSettings() {
+  try {
+    const doc = await db.collection('config').doc('geral').get();
+    if (doc.exists) {
+      const s = doc.data();
+      if (s.pix)               PIX_KEY      = s.pix;
+      if (s.fee !== undefined)  DELIVERY_FEE = Number(s.fee);
+    }
+  } catch (e) {
+    console.error('Erro ao carregar configurações:', e);
+  }
+}
 
 /* =====================================================
    FIREBASE: LOAD PRODUCTS
@@ -785,7 +801,7 @@ function toast(msg) {
    INIT
    ===================================================== */
 async function init() {
-  await loadProducts();
+  await Promise.all([loadProducts(), loadSettings()]);
   document.getElementById('loadingScreen').style.display = 'none';
   renderCats();
   renderProducts();
