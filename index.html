@@ -789,6 +789,9 @@ function s4() {
       <div class="info-box">
         <div class="info-row"><span style="color:var(--muted)">Entrega:</span>
           <strong>${co.delivery==='entrega'?'🛵 Entrega a domicílio':'🏪 Retirada no local'}</strong></div>
+        ${co.delivery==='retirada'?`
+        <div class="info-row"><span style="color:var(--muted)">Endereço:</span>
+          <strong>📍 ${esc(RESTAURANT_ADDR)}</strong></div>`:''}
         <div class="info-row"><span style="color:var(--muted)">Pagamento:</span>
           <strong>${PAY[co.payment]||co.payment}</strong></div>
         <div class="info-row"><span style="color:var(--muted)">Total:</span>
