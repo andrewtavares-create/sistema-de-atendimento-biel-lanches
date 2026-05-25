@@ -197,6 +197,17 @@
     .info-row { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: .9rem; }
     .info-row:last-child { margin-bottom: 0; }
 
+    /* ── Order Tracking ───────────────────────────────────── */
+    .tracking-box { background: var(--bg); border-radius: 12px; padding: 16px; margin: 14px 0; }
+    .tracking-box h4 { font-size: .95rem; margin-bottom: 14px; }
+    .track-steps { display: flex; flex-direction: column; gap: 10px; }
+    .track-step { display: flex; align-items: center; gap: 10px; font-size: .88rem; color: var(--muted); }
+    .track-step .dot { width: 28px; height: 28px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: .85rem; flex-shrink: 0; }
+    .track-step.done .dot { background: var(--green); }
+    .track-step.active .dot { background: var(--orange); animation: pulse 1.2s infinite; }
+    .track-step.done, .track-step.active { color: var(--text); font-weight: 600; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+
     /* ── Toast ────────────────────────────────────────────── */
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C3E50; color: #fff; padding: 11px 22px; border-radius: 50px; font-weight: 600; z-index: 9999; transition: transform .3s; box-shadow: 0 5px 20px rgba(0,0,0,.3); white-space: nowrap; }
     #toast.show { transform: translateX(-50%) translateY(0); }
@@ -302,8 +313,10 @@ let activeCat  = 'all';
 let step       = 1;
 let co         = { delivery: 'entrega' };
 
-let DELIVERY_FEE = 5;
-let PIX_KEY      = '(11) 99999-9999';
+let DELIVERY_FEE     = 5;
+let PIX_KEY          = '(11) 99999-9999';
+let RESTAURANT_ADDR  = 'Rua das Pizzas, 123 — Centro';
+let unsubTracking    = null;
 
 // Cart: stays in localStorage (per device, intentional)
 const CART = {
@@ -351,8 +364,9 @@ async function loadSettings() {
     const doc = await db.collection('config').doc('geral').get();
     if (doc.exists) {
       const s = doc.data();
-      if (s.pix)               PIX_KEY      = s.pix;
-      if (s.fee !== undefined)  DELIVERY_FEE = Number(s.fee);
+      if (s.pix)               PIX_KEY         = s.pix;
+      if (s.fee !== undefined)  DELIVERY_FEE    = Number(s.fee);
+      if (s.addr)               RESTAURANT_ADDR = s.addr;
     }
   } catch (e) {
     console.error('Erro ao carregar configurações:', e);
@@ -406,7 +420,7 @@ async function placeOrder() {
     const countSnap = await db.collection('pedidos').get();
     const numStr = String(countSnap.size + 1).padStart(4, '0');
 
-    await db.collection('pedidos').add({
+    const docRef = await db.collection('pedidos').add({
       num: numStr,
       date: firebase.firestore.FieldValue.serverTimestamp(),
       customer: { name: co.name, phone: co.phone },
@@ -423,7 +437,8 @@ async function placeOrder() {
       status:    'novo'
     });
 
-    co.orderNum = numStr;
+    co.orderNum   = numStr;
+    co.orderDocId = docRef.id;
     CART.clear();
     syncCart();
     step = 4;
@@ -582,6 +597,7 @@ function startCheckout() {
 }
 function closeCheckout() {
   document.getElementById('checkoutOverlay').classList.remove('show');
+  if (unsubTracking) { unsubTracking(); unsubTracking = null; }
 }
 function renderStep() {
   const titles = ['', 'Seu Pedido', 'Entrega e Endereço', 'Pagamento'];
@@ -663,7 +679,7 @@ function s2() {
         <label class="radio-option${!isDelivery?' sel':''}">
           <input type="radio" name="delivery" value="retirada" ${!isDelivery?'checked':''}>
           <span class="ro-icon">🏪</span>
-          <div><div class="ro-title">Retirar no local</div><div class="ro-desc">Grátis · ~20 min</div></div>
+          <div><div class="ro-title">Retirar no local</div><div class="ro-desc">Grátis · ~20 min · ${esc(RESTAURANT_ADDR)}</div></div>
         </label>
       </div>
     </div>
@@ -749,6 +765,7 @@ function s3() {
 function s4() {
   const total = co.orderTotal || 0;
   const PAY   = { pix:'PIX', cartao:'Cartão (na entrega)', dinheiro:'Dinheiro (na entrega)' };
+  setTimeout(() => startOrderTracking(co.orderDocId, co.delivery), 100);
   return `
     <div class="success-screen">
       <div class="icon">🎉</div>
@@ -758,6 +775,17 @@ function s4() {
         <div style="font-size:.85rem;color:var(--muted);margin-bottom:3px">Número do Pedido</div>
         <div class="num">#${co.orderNum}</div>
       </div>
+
+      <div class="tracking-box">
+        <h4>📍 Acompanhe seu pedido</h4>
+        <div class="track-steps" id="trackSteps">
+          <div class="track-step done"><div class="dot">✓</div><span>Pedido recebido</span></div>
+          <div class="track-step" id="track-preparando"><div class="dot">2</div><span>Em preparação</span></div>
+          <div class="track-step" id="track-pronto"><div class="dot">3</div><span>${co.delivery==='entrega'?'Saiu para entrega':'Pronto para retirada'}</span></div>
+          <div class="track-step" id="track-entregue"><div class="dot">4</div><span>${co.delivery==='entrega'?'Entregue':'Retirado'}</span></div>
+        </div>
+      </div>
+
       <div class="info-box">
         <div class="info-row"><span style="color:var(--muted)">Entrega:</span>
           <strong>${co.delivery==='entrega'?'🛵 Entrega a domicílio':'🏪 Retirada no local'}</strong></div>
@@ -766,21 +794,52 @@ function s4() {
         <div class="info-row"><span style="color:var(--muted)">Total:</span>
           <strong style="color:var(--red)">R$ ${fmt(total)}</strong></div>
       </div>
-      <p style="font-size:.88rem;color:var(--muted);margin-bottom:18px">
-        ${co.delivery==='entrega'
-          ? '🕐 Tempo estimado: <strong>30–45 minutos</strong>'
-          : '🕐 Pronto em: <strong>20–30 minutos</strong>'}
-      </p>
+
       ${co.payment==='pix' ? `
         <div class="pix-box">
           <p style="font-weight:700;margin-bottom:7px">🔔 Envie o PIX para confirmar!</p>
           <div class="pix-key">📱 ${PIX_KEY}</div>
           <p style="margin-top:6px;font-size:.88rem;font-weight:700;color:var(--green)">R$ ${fmt(total)}</p>
         </div>` : ''}
+
       <button class="btn btn-red" style="width:100%;margin-top:20px" onclick="closeCheckout()">
         Fazer Novo Pedido
       </button>
     </div>`;
+}
+
+function startOrderTracking(docId, delivery) {
+  if (unsubTracking) { unsubTracking(); unsubTracking = null; }
+  if (!docId) return;
+
+  const ORDER_STEPS = ['preparando', 'pronto', 'entregue'];
+
+  unsubTracking = db.collection('pedidos').doc(docId).onSnapshot(doc => {
+    if (!doc.exists) return;
+    const status = doc.data().status;
+
+    ORDER_STEPS.forEach(s => {
+      const el = document.getElementById('track-' + s);
+      if (!el) return;
+      el.classList.remove('done', 'active');
+      const idx = ORDER_STEPS.indexOf(s);
+      const cur = ORDER_STEPS.indexOf(status);
+      if (cur > idx)       el.classList.add('done');
+      else if (cur === idx) el.classList.add('active');
+      // update dot
+      const dot = el.querySelector('.dot');
+      if (dot) dot.textContent = cur > idx ? '✓' : String(idx + 2);
+    });
+
+    // Toast de atualização
+    const msgs = {
+      preparando: '👨‍🍳 Seu pedido está sendo preparado!',
+      pronto:     delivery === 'entrega' ? '🛵 Seu pedido saiu para entrega!' : '🎉 Seu pedido está pronto para retirada!',
+      entregue:   '✅ Pedido entregue. Bom apetite!',
+      cancelado:  '❌ Pedido cancelado. Entre em contato.'
+    };
+    if (msgs[status]) toast(msgs[status]);
+  });
 }
 
 function goStep(n) { step = n; renderStep(); }
