@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação Comercial — Sistema de Pedidos Online</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --laranja: #FF6B2B;
+      --laranja-claro: #FF8C5A;
+      --laranja-suave: #FFF0EA;
+      --escuro: #1A1A2E;
+      --cinza: #6B7280;
+      --cinza-claro: #F3F4F6;
+      --verde: #10B981;
+      --azul: #3B82F6;
+      --roxo: #8B5CF6;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F8F9FA;
+      color: var(--escuro);
+    }
+
+    /* ========= SLIDES ========= */
+    .slide {
+      width: 297mm;
+      min-height: 210mm;
+      margin: 0 auto 20px;
+      background: white;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      page-break-after: always;
+    }
+
+    /* ========= SLIDE 1 — CAPA ========= */
+    .slide-capa {
+      background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+      color: white;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px;
+    }
+
+    .slide-capa .badge {
+      background: var(--laranja);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+
+    .slide-capa h1 {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .slide-capa h1 span {
+      color: var(--laranja);
+    }
+
+    .slide-capa p.subtitulo {
+      font-size: 18px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 300;
+      max-width: 500px;
+      line-height: 1.6;
+      margin: 0 auto 40px;
+    }
+
+    .slide-capa .divider {
+      width: 60px;
+      height: 4px;
+      background: var(--laranja);
+      border-radius: 2px;
+      margin: 0 auto 40px;
+    }
+
+    .capa-destaques {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .capa-item {
+      text-align: center;
+    }
+
+    .capa-item .num {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--laranja);
+    }
+
+    .capa-item .label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========= SLIDE 2 — PROBLEMA ========= */
+    .slide-problema {
+      padding: 60px 70px;
+    }
+
+    .slide-header {
+      margin-bottom: 40px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--laranja);
+      margin-bottom: 10px;
+    }
+
+    .slide-header h2 {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--escuro);
+      line-height: 1.2;
+    }
+
+    .slide-header h2 span {
+      color: var(--laranja);
+    }
+
+    .problema-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .problema-card {
+      background: #FFF5F5;
+      border-left: 4px solid #EF4444;
+      border-radius: 0 12px 12px 0;
+      padding: 22px 24px;
+    }
+
+    .problema-card .emoji {
+      font-size: 24px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .problema-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #B91C1C;
+      margin-bottom: 6px;
+    }
+
+    .problema-card p {
+      font-size: 13px;
+      color: #6B7280;
+      line-height: 1.5;
+    }
+
+    .solucao-banner {
+      margin-top: 30px;
+      background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
+      border-radius: 16px;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: white;
+    }
+
+    .solucao-banner .icon {
+      font-size: 40px;
+    }
+
+    .solucao-banner h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .solucao-banner p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    /* ========= SLIDE 3 — FUNCIONALIDADES ========= */
+    .slide-func {
+      padding: 50px 70px;
+    }
+
+    .func-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 32px;
+    }
+
+    .func-card {
+      background: var(--cinza-claro);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .func-card .icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 14px;
+    }
+
+    .func-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--escuro);
+      margin-bottom: 6px;
+    }
+
+    .func-card p {
+      font-size: 12px;
+      color: var(--cinza);
+      line-height: 1.5;
+    }
+
+    .bg-laranja { background: var(--laranja-suave); }
+    .bg-verde { background: #ECFDF5; }
+    .bg-azul { background: #EFF6FF; }
+    .bg-roxo { background: #F5F3FF; }
+    .bg-amarelo { background: #FFFBEB; }
+    .bg-rosa { background: #FFF1F2; }
+
+    /* ========= SLIDE 4 — COMO FUNCIONA ========= */
+    .slide-como {
+      padding: 50px 70px;
+      background: linear-gradient(180deg, white 0%, #FAFAFA 100%);
+    }
+
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-top: 36px;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 35px;
+      left: 50px;
+      right: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--laranja), var(--laranja-claro));
+      z-index: 0;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 0 15px;
+    }
+
+    .step-num {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
+      color: white;
+      font-size: 24px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(255,107,43,0.3);
+    }
+
+    .step h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--escuro);
+    }
+
+    .step p {
+      font-size: 12px;
+      color: var(--cinza);
+      line-height: 1.5;
+    }
+
+    .admin-preview {
+      margin-top: 36px;
+      background: var(--escuro);
+      border-radius: 16px;
+      padding: 24px 30px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: white;
+    }
+
+    .admin-preview .icon {
+      font-size: 48px;
+    }
+
+    .admin-preview h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .admin-preview ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .admin-preview ul li {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-preview ul li::before {
+      content: '✓';
+      color: var(--verde);
+      font-weight: 700;
+    }
+
+    /* ========= SLIDE 5 — BENEFÍCIOS ========= */
+    .slide-beneficios {
+      padding: 50px 70px;
+    }
+
+    .beneficios-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      margin-top: 32px;
+      align-items: center;
+    }
+
+    .beneficio-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .beneficio-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .beneficio-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--laranja-suave);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .beneficio-item h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .beneficio-item p {
+      font-size: 12px;
+      color: var(--cinza);
+      line-height: 1.5;
+    }
+
+    .numeros-box {
+      background: linear-gradient(135deg, var(--escuro), #16213E);
+      border-radius: 24px;
+      padding: 36px 28px;
+      color: white;
+      text-align: center;
+    }
+
+    .numeros-box h3 {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 28px;
+    }
+
+    .numero-stat {
+      margin-bottom: 24px;
+    }
+
+    .numero-stat .big {
+      font-size: 42px;
+      font-weight: 900;
+      color: var(--laranja);
+      line-height: 1;
+    }
+
+    .numero-stat .desc {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+    }
+
+    .numero-stat .divider-h {
+      width: 40px;
+      height: 2px;
+      background: rgba(255,255,255,0.15);
+      margin: 16px auto 0;
+    }
+
+    /* ========= SLIDE 6 — PROPOSTA ========= */
+    .slide-proposta {
+      padding: 50px 70px;
+      background: linear-gradient(180deg, #FAFAFA 0%, white 100%);
+    }
+
+    .proposta-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .preco-card {
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .preco-card.destaque {
+      box-shadow: 0 20px 60px rgba(255,107,43,0.25);
+      transform: scale(1.02);
+    }
+
+    .preco-header {
+      padding: 28px 28px 24px;
+      background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
+      color: white;
+      text-align: center;
+    }
+
+    .preco-header.escuro {
+      background: linear-gradient(135deg, var(--escuro), #16213E);
+    }
+
+    .preco-header .tipo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .preco-header .valor {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .preco-header .valor small {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .preco-header .valor-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .preco-body {
+      background: white;
+      padding: 24px 28px;
+      border: 2px solid var(--cinza-claro);
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .preco-body ul {
+      list-style: none;
+    }
+
+    .preco-body ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--escuro);
+      padding: 7px 0;
+      border-bottom: 1px solid var(--cinza-claro);
+    }
+
+    .preco-body ul li:last-child {
+      border-bottom: none;
+    }
+
+    .preco-body ul li .check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--verde);
+      color: white;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .total-box {
+      margin-top: 28px;
+      background: linear-gradient(135deg, var(--laranja-suave), #FFF8F5);
+      border: 2px solid var(--laranja);
+      border-radius: 16px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .total-box .texto h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--escuro);
+    }
+
+    .total-box .texto p {
+      font-size: 12px;
+      color: var(--cinza);
+    }
+
+    .total-box .preco-total {
+      text-align: right;
+    }
+
+    .total-box .preco-total .main {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--laranja);
+    }
+
+    .total-box .preco-total .sub {
+      font-size: 12px;
+      color: var(--cinza);
+    }
+
+    /* ========= SLIDE 7 — COMPARATIVO ========= */
+    .slide-comparativo {
+      padding: 50px 70px;
+    }
+
+    .comparativo-table {
+      margin-top: 32px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid var(--cinza-claro);
+    }
+
+    .comp-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      background: var(--escuro);
+      color: white;
+      padding: 16px 24px;
+    }
+
+    .comp-header span {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .comp-header span:nth-child(3) {
+      color: var(--laranja);
+    }
+
+    .comp-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--cinza-claro);
+      align-items: center;
+    }
+
+    .comp-row:last-child { border-bottom: none; }
+    .comp-row:nth-child(even) { background: #FAFAFA; }
+
+    .comp-row span {
+      font-size: 13px;
+      color: var(--escuro);
+    }
+
+    .comp-row .feature { font-weight: 500; }
+
+    .check-verde { color: var(--verde); font-size: 18px; font-weight: 900; }
+    .check-laranja { color: var(--laranja); font-size: 18px; font-weight: 900; }
+    .x-vermelho { color: #EF4444; font-size: 16px; font-weight: 900; }
+    .dash { color: #D1D5DB; font-size: 16px; }
+
+    .comp-destaque td, .comp-row.comp-destaque span:nth-child(3) {
+      background: var(--laranja-suave) !important;
+    }
+
+    .col-destaque {
+      background: rgba(255,107,43,0.06);
+    }
+
+    /* ========= SLIDE 8 — PRÓXIMOS PASSOS ========= */
+    .slide-cta {
+      padding: 50px 70px;
+      background: linear-gradient(135deg, #1A1A2E 0%, #0F3460 100%);
+      color: white;
+      justify-content: center;
+    }
+
+    .slide-cta .tag {
+      color: var(--laranja);
+    }
+
+    .slide-cta .slide-header h2 {
+      color: white;
+    }
+
+    .passos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .passo-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 24px 18px;
+      text-align: center;
+    }
+
+    .passo-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--laranja);
+      color: white;
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    .passo-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .passo-card p {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    .contato-box {
+      margin-top: 28px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .contato-box .texto h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .contato-box .texto p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .contato-box .cta-btn {
+      background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* ========= FOOTER ========= */
+    .slide-footer {
+      position: absolute;
+      bottom: 20px;
+      left: 70px;
+      right: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: rgba(0,0,0,0.25);
+    }
+
+    .slide-footer.light {
+      color: rgba(255,255,255,0.25);
+    }
+
+    .slide-footer .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--laranja);
+    }
+
+    /* ========= PRINT ========= */
+    @media print {
+      body { background: white; }
+      .slide {
+        margin: 0;
+        width: 297mm;
+        height: 210mm;
+        min-height: unset;
+        page-break-after: always;
+        break-after: page;
+      }
+      .btn-imprimir { display: none !important; }
+    }
+
+    /* ========= BOTÃO IMPRIMIR ========= */
+    .btn-imprimir {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, var(--laranja), var(--laranja-claro));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(255,107,43,0.4);
+      z-index: 9999;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-imprimir:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(255,107,43,0.5);
+    }
+
+    .instrucoes {
+      background: #1A1A2E;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .instrucoes strong { color: var(--laranja); }
+  </style>
+</head>
+<body>
+
+<button class="btn-imprimir" onclick="window.print()">
+  🖨️ Salvar como PDF
+</button>
+
+<div class="instrucoes">
+  Clique em <strong>"Salvar como PDF"</strong> → no navegador escolha <strong>Destino: "Salvar como PDF"</strong> → Layout: <strong>Paisagem</strong> → Salvar
+</div>
+
+<!-- =============== SLIDE 1 — CAPA =============== -->
+<div class="slide slide-capa">
+  <div class="badge">Proposta Comercial</div>
+  <h1>Seu restaurante<br>vendendo <span>24h por dia</span></h1>
+  <div class="divider"></div>
+  <p class="subtitulo">
+    Sistema completo de pedidos online com cardápio digital,<br>
+    painel administrativo e acompanhamento em tempo real.
+  </p>
+  <div class="capa-destaques">
+    <div class="capa-item">
+      <div class="num">100%</div>
+      <div class="label">Online</div>
+    </div>
+    <div class="capa-item">
+      <div class="num">24h</div>
+      <div class="label">Disponível</div>
+    </div>
+    <div class="capa-item">
+      <div class="num">0</div>
+      <div class="label">Comissão por pedido</div>
+    </div>
+    <div class="capa-item">
+      <div class="num">∞</div>
+      <div class="label">Pedidos simultâneos</div>
+    </div>
+  </div>
+
+  <div class="slide-footer light">
+    <span>Sistema de Pedidos Online</span>
+    <div class="dot"></div>
+    <span>Proposta Exclusiva</span>
+  </div>
+</div>
+
+<!-- =============== SLIDE 2 — O PROBLEMA =============== -->
+<div class="slide slide-problema">
+  <div class="slide-header">
+    <div class="tag">O Cenário Atual</div>
+    <h2>Os problemas que <span>custam dinheiro</span><br>todo dia no seu restaurante</h2>
+  </div>
+
+  <div class="problema-grid">
+    <div class="problema-card">
+      <span class="emoji">📞</span>
+      <h3>Pedidos só pelo telefone</h3>
+      <p>Linha ocupada, pedidos perdidos, funcionário dedicado a atender ligações em vez de produzir.</p>
+    </div>
+    <div class="problema-card">
+      <span class="emoji">💸</span>
+      <h3>Alta comissão do iFood</h3>
+      <p>O iFood cobra até 27% por pedido. Em R$ 50,00 de venda, você fica com menos de R$ 37,00.</p>
+    </div>
+    <div class="problema-card">
+      <span class="emoji">📋</span>
+      <h3>Erros no pedido</h3>
+      <p>Anotações erradas, clientes insatisfeitos, retrabalho na cozinha e prejuízo.</p>
+    </div>
+    <div class="problema-card">
+      <span class="emoji">🕐</span>
+      <h3>Fechado fora do horário</h3>
+      <p>Clientes que querem fazer pedido à noite ou de madrugada não conseguem. Você perde vendas.</p>
+    </div>
+  </div>
+
+  <div class="solucao-banner">
+    <div class="icon">🚀</div>
+    <div>
+      <h3>A solução: seu próprio sistema de pedidos online</h3>
+      <p>Sem comissão por pedido · Sem depender de telefone · Disponível 24h · Você no controle total</p>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Sistema de Pedidos Online</span>
+    <div class="dot"></div>
+    <span>Proposta Comercial</span>
+  </div>
+</div>
+
+<!-- =============== SLIDE 3 — FUNCIONALIDADES =============== -->
+<div class="slide slide-func">
+  <div class="slide-header">
+    <div class="tag">O que está incluso</div>
+    <h2>Tudo que seu restaurante precisa,<br><span>pronto para funcionar</span></h2>
+  </div>
+
+  <div class="func-grid">
+    <div class="func-card">
+      <div class="icon-circle bg-laranja">🍕</div>
+      <h3>Cardápio Digital Completo</h3>
+      <p>Categorias, fotos, descrições e preços. Atualização em tempo real pelo painel.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-verde">🛒</div>
+      <h3>Carrinho de Compras</h3>
+      <p>Cliente monta o pedido, visualiza o total e finaliza sozinho. Sem intervenção sua.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-azul">🛵</div>
+      <h3>Entrega ou Retirada</h3>
+      <p>Cliente escolhe entre delivery com endereço ou retirada no local.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-roxo">💳</div>
+      <h3>Formas de Pagamento</h3>
+      <p>PIX com chave configurável, cartão de crédito/débito e dinheiro.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-amarelo">📊</div>
+      <h3>Painel Administrativo</h3>
+      <p>Gerencia produtos, pedidos e configurações com senha de acesso exclusiva.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-rosa">⚡</div>
+      <h3>Pedidos em Tempo Real</h3>
+      <p>Novos pedidos aparecem automaticamente com alerta sonoro. Zero delay.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-verde">📍</div>
+      <h3>Rastreamento pelo Cliente</h3>
+      <p>O cliente acompanha o status do pedido em tempo real: recebido → preparando → saiu para entrega.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-laranja">💬</div>
+      <h3>Botão WhatsApp</h3>
+      <p>Atendimento direto pelo WhatsApp com botão integrado no site.</p>
+    </div>
+    <div class="func-card">
+      <div class="icon-circle bg-azul">📱</div>
+      <h3>Funciona em Celular</h3>
+      <p>Layout responsivo: perfeito em celular, tablet e computador.</p>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Sistema de Pedidos Online</span>
+    <div class="dot"></div>
+    <span>Proposta Comercial</span>
+  </div>
+</div>
+
+<!-- =============== SLIDE 4 — COMO FUNCIONA =============== -->
+<div class="slide slide-como">
+  <div class="slide-header">
+    <div class="tag">Experiência do Cliente</div>
+    <h2>Simples para o cliente,<br><span>lucrativo para você</span></h2>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Acessa o site</h3>
+      <p>Cliente abre o link no celular e vê o cardápio completo com fotos e preços</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Monta o pedido</h3>
+      <p>Adiciona itens ao carrinho, escolhe quantidades e revisa o total</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Escolhe entrega</h3>
+      <p>Informa endereço para delivery ou escolhe retirar no local</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Paga</h3>
+      <p>Escolhe PIX, cartão ou dinheiro. PIX gera QR Code automático</p>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <h3>Acompanha</h3>
+      <p>Rastreia o pedido em tempo real até a entrega</p>
+    </div>
+  </div>
+
+  <div class="admin-preview">
+    <div class="icon">🖥️</div>
+    <div>
+      <h3>Você recebe o pedido no painel instantaneamente</h3>
+      <ul>
+        <li>Alerta sonoro automático</li>
+        <li>Dados completos do cliente</li>
+        <li>Atualiza status com 1 clique</li>
+        <li>Histórico completo de pedidos</li>
+        <li>Gerencia produtos e preços</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Sistema de Pedidos Online</span>
+    <div class="dot"></div>
+    <span>Proposta Comercial</span>
+  </div>
+</div>
+
+<!-- =============== SLIDE 5 — BENEFÍCIOS =============== -->
+<div class="slide slide-beneficios">
+  <div class="slide-header">
+    <div class="tag">Por que vale a pena</div>
+    <h2>Benefícios reais para<br><span>o seu negócio</span></h2>
+  </div>
+
+  <div class="beneficios-layout">
+    <div class="beneficio-lista">
+      <div class="beneficio-item">
+        <div class="beneficio-icon">💰</div>
+        <div>
+          <h3>Zero comissão por pedido</h3>
+          <p>Diferente do iFood que cobra 12% a 27%, aqui você paga apenas a mensalidade fixa. Quanto mais vende, mais economiza.</p>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">🎯</div>
+        <div>
+          <h3>Seus clientes, sua marca</h3>
+          <p>O site é personalizado com as cores, o nome e o cardápio do seu restaurante. Não divide espaço com a concorrência.</p>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">⏰</div>
+        <div>
+          <h3>Vendendo enquanto você dorme</h3>
+          <p>O cardápio fica disponível online 24h. Clientes podem fazer pedidos agendados fora do horário de funcionamento.</p>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">📈</div>
+        <div>
+          <h3>Mais produtividade</h3>
+          <p>Sem atender telefone, sem anotar pedido na mão. A equipe foca em produzir. Menos erros, mais agilidade.</p>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">🔧</div>
+        <div>
+          <h3>Suporte e manutenção incluso</h3>
+          <p>Qualquer problema técnico, bug ou ajuste simples: só chamar no WhatsApp em horário comercial.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="numeros-box">
+      <h3>Potencial de economia</h3>
+      <div class="numero-stat">
+        <div class="big">R$270</div>
+        <div class="desc">economia por mês<br>vs. iFood (10 pedidos/dia)</div>
+        <div class="divider-h"></div>
+      </div>
+      <div class="numero-stat">
+        <div class="big">R$1.580</div>
+        <div class="desc">economia no 1º ano<br>vs. plataformas com comissão</div>
+        <div class="divider-h"></div>
+      </div>
+      <div class="numero-stat">
+        <div class="big">2 min</div>
+        <div class="desc">tempo médio para<br>receber um pedido</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Sistema de Pedidos Online</span>
+    <div class="dot"></div>
+    <span>Proposta Comercial</span>
+  </div>
+</div>
+
+<!-- =============== SLIDE 6 — PROPOSTA DE VALOR =============== -->
+<div class="slide slide-proposta">
+  <div class="slide-header">
+    <div class="tag">Investimento</div>
+    <h2>Proposta simples,<br><span>resultado poderoso</span></h2>
+  </div>
+
+  <div class="proposta-cards">
+    <!-- Card 1: Taxa inicial -->
+    <div class="preco-card destaque">
+      <div class="preco-header">
+        <div class="tipo">💻 Taxa de Desenvolvimento</div>
+        <div class="valor"><small>R$</small> 1.000</div>
+        <div class="valor-label">pagamento único · parcelável</div>
+      </div>
+      <div class="preco-body">
+        <ul>
+          <li><span class="check">✓</span>Site de pedidos completo e personalizado</li>
+          <li><span class="check">✓</span>Cardápio digital com fotos e categorias</li>
+          <li><span class="check">✓</span>Carrinho e checkout (3 etapas)</li>
+          <li><span class="check">✓</span>PIX, cartão e dinheiro configurados</li>
+          <li><span class="check">✓</span>Painel admin com senha exclusiva</li>
+          <li><span class="check">✓</span>Rastreamento de pedido em tempo real</li>
+          <li><span class="check">✓</span>Responsivo para celular e computador</li>
+          <li><span class="check">✓</span>Treinamento de uso incluso</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Card 2: Mensalidade -->
+    <div class="preco-card">
+      <div class="preco-header escuro">
+        <div class="tipo">🔧 Mensalidade de Manutenção</div>
+        <div class="valor"><small>R$</small> 300<small>/mês</small></div>
+        <div class="valor-label">após a entrega do sistema</div>
+      </div>
+      <div class="preco-body">
+        <ul>
+          <li><span class="check">✓</span>Hospedagem online 24h/7 dias</li>
+          <li><span class="check">✓</span>Banco de dados em nuvem (Firebase)</li>
+          <li><span class="check">✓</span>Suporte via WhatsApp (horário comercial)</li>
+          <li><span class="check">✓</span>Correção de bugs e problemas técnicos</li>
+          <li><span class="check">✓</span>Até 3 alterações simples por mês</li>
+          <li><span class="check">✓</span>Monitoramento do sistema</li>
+          <li><span class="check">✓</span>Backups periódicos dos dados</li>
+          <li><span class="check">✓</span>Cancelamento com 30 dias de aviso</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-box">
+    <div class="texto">
+      <h3>Investimento total no 1º ano</h3>
+      <p>R$ 1.000 (desenvolvimento) + R$ 3.600 (12 meses × R$ 300)</p>
+    </div>
+    <div class="preco-total">
+      <div class="main">R$ 4.600</div>
+      <div class="sub">vs. R$ 6.000–12.000 de comissão no iFood*</div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>*Estimativa: 10 pedidos/dia a R$40 médio com 12% de comissão</span>
+    <div class="dot"></div>
+    <span>Proposta Comercial</span>
+  </div>
+</div>
+
+<!-- =============== SLIDE 7 — COMPARATIVO =============== -->
+<div class="slide slide-comparativo">
+  <div class="slide-header">
+    <div class="tag">Comparativo</div>
+    <h2>Por que não depender<br><span>apenas do iFood?</span></h2>
+  </div>
+
+  <div class="comparativo-table">
+    <div class="comp-header">
+      <span>Recurso</span>
+      <span>iFood / Rappi</span>
+      <span style="text-align:center">✦ Seu Site</span>
+      <span>WhatsApp</span>
+    </div>
+
+    <div class="comp-row">
+      <span class="feature">Sem comissão por pedido</span>
+      <span class="x-vermelho">✗</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="check-verde">✓</span>
+    </div>
+    <div class="comp-row">
+      <span class="feature">Painel para gerenciar pedidos</span>
+      <span class="check-verde">✓</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="x-vermelho">✗</span>
+    </div>
+    <div class="comp-row">
+      <span class="feature">Identidade visual própria</span>
+      <span class="x-vermelho">✗</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="x-vermelho">✗</span>
+    </div>
+    <div class="comp-row">
+      <span class="feature">Rastreamento do pedido pelo cliente</span>
+      <span class="check-verde">✓</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="x-vermelho">✗</span>
+    </div>
+    <div class="comp-row">
+      <span class="feature">Custo fixo previsível</span>
+      <span class="x-vermelho">✗</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="check-verde">✓</span>
+    </div>
+    <div class="comp-row">
+      <span class="feature">Funciona sem comissão variável</span>
+      <span class="x-vermelho">✗</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="check-verde">✓</span>
+    </div>
+    <div class="comp-row">
+      <span class="feature">Disponível 24h automaticamente</span>
+      <span class="check-verde">✓</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="x-vermelho">✗</span>
+    </div>
+    <div class="comp-row">
+      <span class="feature">Suporte dedicado</span>
+      <span class="dash">—</span>
+      <span class="check-laranja col-destaque" style="text-align:center">✓</span>
+      <span class="x-vermelho">✗</span>
+    </div>
+    <div class="comp-row" style="background:#FFF8F5; border-top: 2px solid var(--laranja);">
+      <span class="feature" style="font-weight:700; color:var(--laranja)">Custo mensal estimado*</span>
+      <span style="font-weight:700; color:#EF4444">R$ 500–2.000</span>
+      <span class="col-destaque" style="text-align:center; font-weight:900; color:var(--laranja)">R$ 300</span>
+      <span style="font-weight:700; color:var(--cinza)">Grátis</span>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>*Custo do iFood estimado com 10 pedidos/dia a R$50 médio e 12% comissão</span>
+    <div class="dot"></div>
+    <span>Proposta Comercial</span>
+  </div>
+</div>
+
+<!-- =============== SLIDE 8 — PRÓXIMOS PASSOS =============== -->
+<div class="slide slide-cta">
+  <div class="slide-header">
+    <div class="tag">Próximos Passos</div>
+    <h2>Vamos começar?<br><span>É mais simples do que parece</span></h2>
+  </div>
+
+  <div class="passos-grid">
+    <div class="passo-card">
+      <div class="passo-num">1</div>
+      <h3>Fechar contrato</h3>
+      <p>Assinar o contrato de prestação de serviços e realizar o pagamento da entrada</p>
+    </div>
+    <div class="passo-card">
+      <div class="passo-num">2</div>
+      <h3>Enviar informações</h3>
+      <p>Cardápio completo, fotos dos produtos, chave PIX, endereço e cores da sua marca</p>
+    </div>
+    <div class="passo-card">
+      <div class="passo-num">3</div>
+      <h3>Desenvolvimento</h3>
+      <p>O sistema fica pronto e personalizado para o seu restaurante em até 7 dias úteis</p>
+    </div>
+    <div class="passo-card">
+      <div class="passo-num">4</div>
+      <h3>Entrega e treinamento</h3>
+      <p>Você recebe o link do site, acesso ao painel e treinamento completo de uso</p>
+    </div>
+  </div>
+
+  <div class="contato-box">
+    <div class="texto">
+      <h3>Pronto para ter seu restaurante vendendo online?</h3>
+      <p>Entre em contato agora e tire todas as suas dúvidas sem compromisso.</p>
+    </div>
+    <a href="#" class="cta-btn">💬 Falar no WhatsApp</a>
+  </div>
+
+  <div class="slide-footer light">
+    <span>Sistema de Pedidos Online — Proposta Comercial</span>
+    <div class="dot"></div>
+    <span>Obrigado pela atenção!</span>
+  </div>
+</div>
+
+</body>
+</html>
