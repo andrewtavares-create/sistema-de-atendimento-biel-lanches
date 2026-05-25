@@ -197,6 +197,22 @@
     .info-row { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: .9rem; }
     .info-row:last-child { margin-bottom: 0; }
 
+    /* ── Tracking Banner ──────────────────────────────────── */
+    #trackingBanner {
+      background: linear-gradient(135deg, #1A5276, #2980B9);
+      color: #fff; padding: 10px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    #trackingBanner span { font-size: .92rem; }
+    #bannerBtn {
+      background: #fff; color: #2980B9; border: none;
+      padding: 7px 16px; border-radius: 50px;
+      font-weight: 700; font-size: .85rem; cursor: pointer;
+      white-space: nowrap; transition: all .2s;
+    }
+    #bannerBtn:hover { background: #EBF5FF; }
+
     /* ── Order Tracking ───────────────────────────────────── */
     .tracking-box { background: var(--bg); border-radius: 12px; padding: 16px; margin: 14px 0; }
     .tracking-box h4 { font-size: .95rem; margin-bottom: 14px; }
@@ -244,6 +260,12 @@
   <nav class="categories" id="catsNav"></nav>
 </header>
 
+<!-- ── TRACKING BANNER ─────────────────────────────────────── -->
+<div id="trackingBanner" style="display:none">
+  <span>🍕 Pedido <strong id="bannerNum"></strong> em andamento</span>
+  <button id="bannerBtn" onclick="openTrackingModal()">Acompanhar →</button>
+</div>
+
 <!-- ── HERO ────────────────────────────────────────────────── -->
 <div class="hero">
   <h1>🍕 Bem-vindo à Biel Pizzaria!</h1>
@@ -272,6 +294,33 @@
     <button class="checkout-btn" onclick="startCheckout()">Finalizar Pedido →</button>
   </div>
 </aside>
+
+<!-- ── TRACKING MODAL ──────────────────────────────────────── -->
+<div class="modal-overlay" id="trackingOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="step-lbl">Acompanhamento</div>
+        <h2>📍 Seu Pedido <span id="trackModalNum"></span></h2>
+      </div>
+      <button class="close-btn" onclick="closeTrackingModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="tracking-box" style="background:#fff;padding:0">
+        <div class="track-steps" id="trackModalSteps">
+          <div class="track-step done"><div class="dot">✓</div><span>Pedido recebido</span></div>
+          <div class="track-step" id="tmod-preparando"><div class="dot">2</div><span>Em preparação</span></div>
+          <div class="track-step" id="tmod-pronto"><div class="dot">3</div><span id="tmod-pronto-label">Saiu para entrega</span></div>
+          <div class="track-step" id="tmod-entregue"><div class="dot">4</div><span id="tmod-entregue-label">Entregue</span></div>
+        </div>
+      </div>
+      <div id="trackModalStatus" style="text-align:center;margin-top:18px;font-size:.9rem;color:var(--muted)">
+        Conectando ao servidor...
+      </div>
+      <button class="btn btn-grey" style="width:100%;margin-top:18px" onclick="closeTrackingModal()">Fechar</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── CHECKOUT MODAL ──────────────────────────────────────── -->
 <div class="modal-overlay" id="checkoutOverlay">
@@ -441,6 +490,7 @@ async function placeOrder() {
     co.orderDocId = docRef.id;
     CART.clear();
     syncCart();
+    saveOrderLocally(numStr, docRef.id, co.delivery);
     step = 4;
     document.getElementById('stepLbl').textContent   = '';
     document.getElementById('stepTitle').textContent = 'Pedido Confirmado!';
@@ -811,6 +861,99 @@ function s4() {
     </div>`;
 }
 
+/* =====================================================
+   PERSISTENT ORDER TRACKING
+   ===================================================== */
+function saveOrderLocally(num, docId, delivery) {
+  localStorage.setItem('biel_last_order', JSON.stringify({
+    num, docId, delivery, date: new Date().toISOString()
+  }));
+}
+
+async function checkSavedOrder() {
+  const saved = localStorage.getItem('biel_last_order');
+  if (!saved) return;
+  const order = JSON.parse(saved);
+
+  // Ignore orders older than 24h
+  if ((Date.now() - new Date(order.date).getTime()) > 86400000) {
+    localStorage.removeItem('biel_last_order'); return;
+  }
+
+  try {
+    const doc = await db.collection('pedidos').doc(order.docId).get();
+    if (!doc.exists) { localStorage.removeItem('biel_last_order'); return; }
+    const status = doc.data().status;
+    if (status === 'entregue' || status === 'cancelado') {
+      localStorage.removeItem('biel_last_order'); return;
+    }
+  } catch (e) { /* offline — show banner anyway */ }
+
+  // Show banner
+  document.getElementById('bannerNum').textContent = '#' + order.num;
+  document.getElementById('trackingBanner').style.display = 'flex';
+  document.getElementById('trackingBanner').dataset.docId    = order.docId;
+  document.getElementById('trackingBanner').dataset.delivery = order.delivery;
+  document.getElementById('trackingBanner').dataset.num      = order.num;
+}
+
+let unsubTrackingModal = null;
+
+function openTrackingModal() {
+  const banner   = document.getElementById('trackingBanner');
+  const docId    = banner.dataset.docId;
+  const delivery = banner.dataset.delivery;
+  const num      = banner.dataset.num;
+
+  document.getElementById('trackModalNum').textContent = '#' + num;
+  const prontoLabel   = document.getElementById('tmod-pronto-label');
+  const entregueLabel = document.getElementById('tmod-entregue-label');
+  if (prontoLabel)   prontoLabel.textContent   = delivery === 'entrega' ? 'Saiu para entrega' : 'Pronto para retirada';
+  if (entregueLabel) entregueLabel.textContent  = delivery === 'entrega' ? 'Entregue' : 'Retirado';
+
+  document.getElementById('trackingOverlay').classList.add('show');
+
+  if (unsubTrackingModal) { unsubTrackingModal(); unsubTrackingModal = null; }
+
+  const STEPS = ['preparando', 'pronto', 'entregue'];
+  const STATUS_TEXT = {
+    novo:       '⏳ Aguardando o restaurante confirmar...',
+    preparando: '👨‍🍳 Seu pedido está sendo preparado!',
+    pronto:     delivery === 'entrega' ? '🛵 Seu pedido saiu para entrega!' : '🎉 Pronto! Vá buscar seu pedido.',
+    entregue:   '✅ Pedido entregue. Bom apetite!',
+    cancelado:  '❌ Pedido cancelado. Entre em contato.'
+  };
+
+  unsubTrackingModal = db.collection('pedidos').doc(docId).onSnapshot(doc => {
+    if (!doc.exists) return;
+    const status = doc.data().status;
+
+    STEPS.forEach((s, idx) => {
+      const el  = document.getElementById('tmod-' + s);
+      if (!el) return;
+      el.classList.remove('done', 'active');
+      const cur = STEPS.indexOf(status);
+      if (cur > idx)        el.classList.add('done');
+      else if (cur === idx) el.classList.add('active');
+      const dot = el.querySelector('.dot');
+      if (dot) dot.textContent = cur > idx ? '✓' : String(idx + 2);
+    });
+
+    const statusEl = document.getElementById('trackModalStatus');
+    if (statusEl) statusEl.textContent = STATUS_TEXT[status] || '';
+
+    if (status === 'entregue' || status === 'cancelado') {
+      localStorage.removeItem('biel_last_order');
+      document.getElementById('trackingBanner').style.display = 'none';
+    }
+  });
+}
+
+function closeTrackingModal() {
+  document.getElementById('trackingOverlay').classList.remove('show');
+  if (unsubTrackingModal) { unsubTrackingModal(); unsubTrackingModal = null; }
+}
+
 function startOrderTracking(docId, delivery) {
   if (unsubTracking) { unsubTracking(); unsubTracking = null; }
   if (!docId) return;
@@ -871,6 +1014,7 @@ async function init() {
   renderCats();
   renderProducts();
   syncCart();
+  checkSavedOrder();
 }
 
 init();
