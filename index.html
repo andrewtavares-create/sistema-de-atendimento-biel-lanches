@@ -648,6 +648,7 @@ function startCheckout() {
 function closeCheckout() {
   document.getElementById('checkoutOverlay').classList.remove('show');
   if (unsubTracking) { unsubTracking(); unsubTracking = null; }
+  checkSavedOrder();
 }
 function renderStep() {
   const titles = ['', 'Seu Pedido', 'Entrega e Endereço', 'Pagamento'];
