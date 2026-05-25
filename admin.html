@@ -246,6 +246,7 @@
         <div class="fg"><label>Chave PIX</label><input id="setPix" type="text" placeholder="Número, e-mail ou CNPJ"></div>
         <div class="fg"><label>Taxa de entrega (R$)</label><input id="setFee" type="number" step="0.50" value="5"></div>
         <div class="fg"><label>Endereço do restaurante</label><input id="setAddr" type="text" placeholder="Rua, número — Bairro"></div>
+        <div class="fg"><label>WhatsApp para atendimento</label><input id="setWhatsapp" type="text" placeholder="Ex: 5511999999999 (com código do país)"></div>
         <hr style="margin:18px 0;border-color:var(--border)">
         <div class="fg"><label>Nova senha de admin</label><input id="setNewPwd" type="password" placeholder="Deixe em branco para não alterar"></div>
         <div class="fg"><label>Confirmar nova senha</label><input id="setConfPwd" type="password" placeholder="Repita a nova senha"></div>
@@ -643,9 +644,10 @@ async function loadSettings() {
   try {
     const doc = await db.collection('config').doc('geral').get();
     const s   = doc.exists ? doc.data() : {};
-    document.getElementById('setPix').value  = s.pix  || '(11) 99999-9999';
-    document.getElementById('setFee').value  = s.fee  !== undefined ? s.fee : '5';
-    document.getElementById('setAddr').value = s.addr || 'Rua das Pizzas, 123 — Centro';
+    document.getElementById('setPix').value      = s.pix      || '(11) 99999-9999';
+    document.getElementById('setFee').value      = s.fee      !== undefined ? s.fee : '5';
+    document.getElementById('setAddr').value     = s.addr     || 'Rua das Pizzas, 123 — Centro';
+    document.getElementById('setWhatsapp').value = s.whatsapp || '';
   } catch (e) { toast('Erro ao carregar configurações.'); }
 }
 
@@ -665,7 +667,8 @@ async function saveSettings() {
   }
 
   try {
-    await db.collection('config').doc('geral').set({ pix, fee: parseFloat(fee)||5, addr }, { merge: true });
+    const whatsapp = document.getElementById('setWhatsapp').value.trim();
+  await db.collection('config').doc('geral').set({ pix, fee: parseFloat(fee)||5, addr, whatsapp }, { merge: true });
     toast('✓ Configurações salvas!');
   } catch (e) { toast('Erro ao salvar configurações.'); }
 }

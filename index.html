@@ -224,6 +224,25 @@
     .track-step.done, .track-step.active { color: var(--text); font-weight: 600; }
     @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
 
+    /* ── WhatsApp Button ──────────────────────────────────── */
+    .whatsapp-fab {
+      position: fixed; bottom: 24px; right: 20px; z-index: 150;
+      background: #25D366; color: #fff;
+      display: flex; align-items: center; gap: 9px;
+      padding: 13px 20px; border-radius: 50px;
+      font-weight: 700; font-size: .95rem;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37,211,102,.45);
+      transition: all .25s;
+    }
+    .whatsapp-fab:hover { background: #128C7E; transform: scale(1.05); box-shadow: 0 6px 24px rgba(37,211,102,.55); }
+    .whatsapp-fab .wa-icon { font-size: 1.3rem; }
+    .whatsapp-fab .wa-pulse {
+      width: 10px; height: 10px; background: #fff;
+      border-radius: 50%; animation: wapulse 1.8s infinite;
+    }
+    @keyframes wapulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
     /* ── Toast ────────────────────────────────────────────── */
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C3E50; color: #fff; padding: 11px 22px; border-radius: 50px; font-weight: 600; z-index: 9999; transition: transform .3s; box-shadow: 0 5px 20px rgba(0,0,0,.3); white-space: nowrap; }
     #toast.show { transform: translateX(-50%) translateY(0); }
@@ -336,6 +355,13 @@
   </div>
 </div>
 
+<!-- ── WHATSAPP BUTTON ─────────────────────────────────────── -->
+<a id="whatsappBtn" href="#" target="_blank" rel="noopener" class="whatsapp-fab">
+  <span class="wa-icon">💬</span>
+  Falar no WhatsApp
+  <span class="wa-pulse"></span>
+</a>
+
 <!-- ── TOAST ───────────────────────────────────────────────── -->
 <div id="toast"></div>
 
@@ -365,6 +391,7 @@ let co         = { delivery: 'entrega' };
 let DELIVERY_FEE     = 5;
 let PIX_KEY          = '(11) 99999-9999';
 let RESTAURANT_ADDR  = 'Rua das Pizzas, 123 — Centro';
+let WHATSAPP_NUM     = '5511999999999';
 let unsubTracking    = null;
 
 // Cart: stays in localStorage (per device, intentional)
@@ -416,6 +443,7 @@ async function loadSettings() {
       if (s.pix)               PIX_KEY         = s.pix;
       if (s.fee !== undefined)  DELIVERY_FEE    = Number(s.fee);
       if (s.addr)               RESTAURANT_ADDR = s.addr;
+      if (s.whatsapp)           WHATSAPP_NUM    = s.whatsapp.replace(/\D/g, '');
     }
   } catch (e) {
     console.error('Erro ao carregar configurações:', e);
@@ -1009,9 +1037,17 @@ function toast(msg) {
 /* =====================================================
    INIT
    ===================================================== */
+function updateWhatsappBtn() {
+  const btn = document.getElementById('whatsappBtn');
+  if (!btn) return;
+  const msg = encodeURIComponent('Olá! Preciso de ajuda com meu pedido na Biel Pizzaria 🍕');
+  btn.href = `https://wa.me/${WHATSAPP_NUM}?text=${msg}`;
+}
+
 async function init() {
   await Promise.all([loadProducts(), loadSettings()]);
   document.getElementById('loadingScreen').style.display = 'none';
+  updateWhatsappBtn();
   renderCats();
   renderProducts();
   syncCart();
