@@ -255,7 +255,7 @@
   <div class="cart-footer" id="cartFooter" style="display:none">
     <div class="total-row"><span>Subtotal</span><span id="cartSubtotal">R$ 0,00</span></div>
     <div class="total-row" id="deliveryRow" style="display:none">
-      <span>Taxa de entrega</span><span>R$ 5,00</span>
+      <span>Taxa de entrega</span><span id="deliveryFeeDisplay">R$ 5,00</span>
     </div>
     <div class="total-row big"><span>Total</span><span id="cartTotal">R$ 0,00</span></div>
     <button class="checkout-btn" onclick="startCheckout()">Finalizar Pedido →</button>
@@ -532,6 +532,8 @@ function syncCart() {
   document.getElementById('cartFooter').style.display = n > 0 ? 'block' : 'none';
   const dr = document.getElementById('deliveryRow');
   if (dr) dr.style.display = co.delivery === 'entrega' ? 'flex' : 'none';
+  const fd = document.getElementById('deliveryFeeDisplay');
+  if (fd) fd.textContent = 'R$ ' + fmt(DELIVERY_FEE);
 }
 
 function renderCartItems() {
